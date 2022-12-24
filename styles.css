@@ -1,0 +1,727 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
+}
+
+/* The scroll-padding shorthand property sets scroll padding on all sides of an element at once, much like the padding property does for padding on an element.
+   The scroll-padding-* properties define offsets for the optimal viewing region of the scrollport: the region used as the target region for placing things in view of the user.
+*/
+
+/* The scroll-behavior property specifies whether to smoothly animate the scroll position, instead of a straight jump, when the user clicks on a link within a scrollable box. */
+
+/* Some variables */
+
+:root {
+  --main-color: #ff2c1f;
+  --text-color: #020307;
+  --bg-color: #fff;
+}
+
+/* Custom Scrollbar */
+html::-webkit-scrollbar {
+  width: 0.5rem;
+  background: var(--text-color);
+}
+
+/* NOTE: The black scroll is giving the effect of a right margin on the html document */
+
+html::-webkit-scrollbar-thumb {
+  background: var(--text-color);
+  border-radius: 5rem;
+}
+
+body {
+  color: var(--bg-color);
+  background: var(--text-color);
+}
+
+section {
+  padding: 4.5rem 0 1.5rem;
+  /* border: 5px solid green; */
+}
+
+/* NOTE: If padding has 3 values say (4.5rem 0 1.5rem), then the top padding is 4.5rem, the left AND right padding are 0, while the bottom padding is 1.5rem */
+
+/* NOTE CRAZY TECHNIQUE:
+
+   (1) Set the background of the body to black
+   (2) Set the position of the header to fixed....two things happened (This gives it a z-index, and it also removes it from document flow.....it brings the section up, and it is infront of that padding with a block background of the body)
+   (3) Set the top (relative to viewport) and rigth fixed positon to zero
+   (4) Add a very high z-index, say 1000, because we do not know what element we might scroll over than can have a higher index than header..........also the high z-index is done so that the color of the text in the header is still white, and not grey
+   (5) The section that comes immediately after the header tag, give it a padding top of 4.5rem
+   (6) This padding top, 4.5rem, must be slightly less than the total height of the header section. We are kind of tucking in the padding of the section behind the header.
+   (7) Set the position of the header to fixed
+   (8) Notice there is no background color for the header.........it is default transparent
+
+*/
+
+header {
+  position: fixed;
+  width: 100%;
+  /* border: 2px solid white; */
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 100px;
+  transition: 0.5s;
+  /* background: var(--main-color); */
+}
+
+header.shadow {
+  background: var(--bg-color);
+}
+
+header.shadow .navbar a {
+  color: var(--text-color);
+}
+
+header.shadow .logo {
+  color: var(--text-color);
+  box-shadow: 0 0 4px rgb(14 55 54 / 15%);
+}
+
+/* PLEASE NOTE: The transition here is for when the browser refreshes, we see the header appear with a delay */
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--bg-color);
+  /* border: 2px solid blue; */
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
+/* PLEASE NOTE: The .logo class on the anchor tag will affect the "Movies" text i.e its font-size*/
+
+/* What is column-gap property: The column-gap property specifies the gap between the columns.*/
+
+.logo .bx {
+  font-size: 24px;
+  color: var(--main-color);
+}
+
+.navbar {
+  display: flex;
+  column-gap: 5rem;
+  /* border: 1px solid blue; */
+}
+
+.navbar li {
+  position: relative;
+  /* border: 1px solid red; */
+}
+
+.navbar a {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--bg-color);
+  cursor: pointer;
+  /* border: 1px solid blue; */
+}
+
+/* PLEASE NOTE: You can give font-size and font-weight to an anchor tag that has text within it */
+
+.navbar a::after {
+  content: "";
+  width: 0;
+  height: 2px;
+  background: var(--main-color);
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  transition: 0.4s all linear;
+}
+
+/* PLEASE NOTE: The technique they used for the width of the red line. Notice how it is as wide as the text content with width:100% */
+
+.navbar a:hover::after {
+  width: 100%;
+}
+
+/* NOTE PLEASE: You can't say a::after:hover. Also note the technique of of setting the width of the empty content to 0, and then to 100% on hover with transition linear */
+
+.navbar .home-active::after {
+  width: 100%;
+}
+/* NOTE: Another technique of setting the active class with the red bar */
+
+#menu-icon {
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000001;
+  display: none;
+}
+
+.btn {
+  background: var(--main-color);
+  /* border: 1px solid white; */
+  padding: 0.7rem 1.4rem;
+  color: var(--bg-color);
+  border-radius: 0.5rem;
+}
+
+/* TECHNIQUE: You can use background, padding, and border-radius to create a button */
+
+.btn:hover {
+  background: #fa1216;
+}
+
+/* NOTE: Anchor tags are inline tags */
+
+.container {
+  /* border: 2px solid blue; */
+  width: 100%;
+  min-height: 640px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgb(2, 3, 7, 0.4);
+}
+
+/* PLEASE NOTE: If you use min-height without adding height (same for min-width, max-width and width), the container will take the min-height value as the height value on all screen sizes. Here container is using min-height:640px as height value  */
+/* NOTE TECHNIQUE: They flexed a large image and a block of text within a container. Then the width of the container is 100% of viewport. Also the width of image and height is set to 100% of the viewport
+   Then we used set the position of the container as relative.
+
+   Even though we set a min-height, the large image increases the size of the relative container initially
+
+   Then we set the position of the img to absolute. It is only when we set this img to absolute (out of document flow) that it assumes its original height of 640px
+
+*/
+
+.container img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -1;
+  /* border: 2px solid red; */
+}
+
+/* STEPS FOR ABSOLUTE POSITIONING (A parent container with two children (img and text block))
+  (1) Set the border, height, width of the relative parent container
+  (2) Add position relative to the parent container
+  (3) Set the flex, justify, and align on the parent container so children are side by side
+  (4) Set the border of one absolute child container (img)
+  (5) Add position absolute to the img child
+  (6) Something happens.....actually two things..... Because the img child is out of document flow, the relative parent container now assumes its original height, not height of img. You can see the border of the parent below that of the child. Secondly, the flex now only affects one child (text-block), and then it moves to the left.
+  (7) Set the width of the img child to 100% of its relative parent container
+  (8) Set the height of the img child to 100% of its relative parent container
+  (9) Use object-fit: cover to make the img object fill the entire space
+  (10) Use object-position: center to position the object
+  (11) Set the z-index of the img to -1 so as to see the text-block on the left hidden by position absolute
+
+*/
+/* Object-position property: syntax is left and right , top and bottom. So center is 50%, 50%  */
+/* NOTE: We are using object-fit: cover, but withinn that container, there is another fleed item, so we cannot see it now */
+
+/* Whenever you use position absolute, wait to understand what happened, but still continue */
+
+/* REPLACED ELEMENTS
+
+   Essentially, replaced elements are HTML elements that have a predetermined width and height, without benefit of CSS.
+
+   Another way of thinking of replaced elements is “any tag that has its content replaced by an outside source"
+
+   The position of the replaced element can be affected using CSS, but not the contents of the replaced element itself.
+
+   Examples are img, input (type = "image"), video, button, textarea, iframe, br, hr, object, canvas
+
+   Objects inserted using the CSS content property are anonymous replaced elements. They are "anonymous" because they don't exist in the HTML markup.
+
+   If you can still use CSS to alter the appearance of these elements, how does the fact that they are “replaced” make any difference? Because of two vital rules:
+
+   (1) You cannot apply generated content to replaced elements. That is, you cannot apply the pseudo-element selectors :before or :after to them.
+
+   (2) If the CSS for a replaced element like <svg> does not load, its dimensions default to 300 × 150 pixels.
+
+   PLEASE NOTE: Certain CSS properties can be used to specify how the object contained within the replaced element should be positioned within the element's box area.
+
+   These includes: object-fit and object-position
+
+   object-fit: Specifies how the replaced element's content object should be fitted to the containing element's box
+
+   object-position: Specifies the alignment of the replaced element's content object within the element's box. PLEASSE NOTE: Areas of the box which aren't covered by the replaced element's object will show the element's background.
+
+
+   CATEGORIES OF REPLACED ELEMENTS
+
+   (1) EMBEDDED CONTENT
+
+   This includes any element that imports another resource into the document, or content from another vocabulary that is inserted into the document. These external resources, by their own nature, have the intrinsic dimensions that match the requirements of the definition
+
+   The main elements in this category are EMBED, IFRAME, and VIDEO. These elements are always treated as replaced elements because they always import external content into your document.
+
+   Things are a bit more complicated with elements that fall into this category only in special circumstances:
+
+   (I) APPLET: Treated as a replaced element when it represents a plugin, otherwise it's treated as an ordinary element
+
+   (II) AUDIO: Treated as a replaced element only when it is "exposing a user interface element"
+
+   (III) OBJECT: Treated as a replaced element when it represents an image, plugin, or nested browsing context (similar to iframe)
+
+   (IV) CANVA: Treated as a replaced element when it represents embedded content.
+
+   (2) IMAEGES: In the vast majority of cases (when the image is displayed properly), the img element is treated as a replaced element with the intrinsic dimensions of the image. This category also
+   includes the input elements with a type="image" attribute.
+
+   Things et a bit more complicated when, for various reasons, the image is not rendered on the page. A missing image that the rowser expects it will render eventually has to be treated
+   as a replaced element whose content is the text that the element represents.
+
+
+   DEFAULT SIZE OF REPLACED ELEMENTS
+
+   This is where the information we gathered about intrinsic dimensions becomes useful.
+
+   We have established that already that the WIDTH and HEIGHT properties of replaced elements come from the INTRINSIC DIMENSIONS of the content they bring
+   into the page.
+
+   If these dimensions can't be calculated (like in the case of an iframe loading a blank HTML page), the browser must fall back on some default rules pre specified. We can summarise all this into 3 basic rules
+
+   (1) If the object (replaced elements object) has explicit width, height, and ratio values, use them
+   (2) If the object only has ratio, use auto for both width and height while maintaining the said ratio
+   (3) If none of these dimensions are available:
+        (i) use width: 300px; height: 150px when the viewport is larger than 300px
+        (ii) use "auto" for both width and height and a ratio of 2:1 when the viewport is smaller than 300px
+
+   Here is an example illustrating the situations described above.
+   We have a bitmap image, an SVG image, and an iframe. As you can see, the image is displayed at its normal size, the SVG keeps the aspect ratio but takes all available space while the iframe defaults to a maximum of 300×150.
+   If we narrow down the viewport, the iframe keeps at all times an aspect ratio of 2:1.
+
+   PLEASE NOTE: They are different categories of HTML elements, with <input type="image"> being the only form control that is a replaced element
+*/
+
+.swiper-pagination-bullet {
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 0.2rem !important;
+  background: var(--bg-color) !important;
+  opacity: 1 !important;
+}
+
+.swiper-pagination-bullet-active {
+  width: 1.5rem !important;
+  background: var(--main-color) !important;
+}
+
+.home-text {
+  z-index: 1000;
+  /* border: 1px solid white; */
+  padding: 0 100px;
+}
+
+/* NOTE: Two elements with same z-index values (header and home-text with value 1000), will be determined with their position in the document tree */
+
+.home-text span {
+  color: var(--bg-color);
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.home-text h1 {
+  color: var(--bg-color);
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.play {
+  position: absolute;
+  right: 4rem;
+  bottom: 10%;
+  /* border: 2px solid yellow; */
+}
+
+/* PLEASE NOTE: If you position an inline element as absolute, you will not notice it taken out of document flow */
+/* ALSO NOTE: Here the play anchor tag with the icon is positioned relative to the container with blue border, not its home-text container with white border */
+/* ALSO NOTE: The absolute position was not put on the icon tag (i) directly, but on its parent anchor tag */
+
+.play .bx {
+  background: var(--bg-color);
+  font-size: 2rem;
+  padding: 10px;
+  border: 4px solid rgb(2, 3, 7, 0.4);
+  border-radius: 50%;
+  color: var(--main-color);
+}
+
+.play .bx:hover {
+  background: var(--main-color);
+  color: var(--bg-color);
+  transition: 0.2s all linear;
+}
+
+/* MOVIES SECTION STYLE */
+
+.heading {
+  /* border: 2px solid red; */
+  max-width: 968px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.2rem;
+  font-weight: 500;
+  /* text-align: center; */
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--main-color);
+}
+
+/*MAX-WIDTH:968px: When view port is less than 968px, the red border spans the entire screen, but when viewport is greater than 968px, it does ever grow more than this */
+/* NOTE: Here we used max-width again. In smaller screen sizes like mobile, the red border will span the entire viewport (width: 100%), but in larger screen sizes, the red border will be only 968px, not 100% */
+
+/* MOVIES CONTAINER STYLES */
+
+.movies-container {
+  /* border: 2px solid purple; */
+  max-width: 968px;
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, auto));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* What is auto-fit, minmax(180px) */
+
+/* TECHNIQUE:
+
+  (1) Add images in a container box (recall by default, its width will span the entire viewport, even in resizing, regardless of flex)
+  (2) Ignore sizes of the images
+  (3) Create border around box container
+  (4) Add max-width to restrict its size
+  (5) Use margin-left and margin-right as auto to center the box and its content images
+  (6) Add display grid and template column
+  (7) In the grid template column, we are giving the width of the box as min-width: 180px
+  (8) Then we set the width of the box-img within the box as 100% of its parent box (18px)
+  (9) Recall a container (wether normal, flex, or grid) is as tall (height) of its content (text or img)
+  (10) So all the box-img containers have a height that is the same as the height of the image they contain
+  (10) Add a fixed heigth to the box-img container, this authomatically reduces the height of the box-img containers
+  (11) Target the img tag of the images and set their height to 100% (270px), and width to 100% (18px)
+*/
+
+.box {
+  /* border: 3px solid red; */
+}
+
+.box .box-img {
+  width: 100%;
+  height: 270px;
+  /* border: 2px solid yellow; */
+}
+
+.box .box-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* NOTE: If you don't target the img tag of an image, you can never control its width or height through px, % or whatever */
+
+/* RECALL: This height: 100% was the solution to the grid problem (last child) in Portfolio1 */
+
+.box .box-img img:hover {
+  transform: translateY(-10px);
+  transition: 0.2s all linear;
+}
+
+.box h3 {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.box span {
+  font-size: 13px;
+}
+
+/* COMING SOON STYLES */
+
+.coming-container {
+  /* display: grid;
+  gap: 1rem; */
+  /* border: 2px solid white; */
+  max-width: 968px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 2rem;
+}
+
+.coming-container .box-img img:hover {
+  transform: translateY(0);
+}
+
+.coming-container .box {
+  /* border: 2px solid orange; */
+  width: 100px;
+}
+
+/* NEWLETTER STYLES */
+
+/* Recall: Input elements are inline elements */
+/* A form consists of multiple input fields */
+
+.newsletter {
+  /* border: 2px solid red; */
+  max-width: 968px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 2rem;
+}
+
+.newsletter h2 {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* TECHNIQUE: Notice the use of <br> element and also css text-align: center property */
+
+.newsletter form {
+  /* border: 2px solid red; */
+  background: var(--bg-color);
+  padding: 10px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* PLEASE NOTE: Even without adding a border, we can still add border-radius */
+
+/* PLEASE NOTE: WHY ALWAYS ADD ALIGN-ITEM CENTER: Display flex will make the flex-items the SAME HEIGHT, and side by side with no margin between them. Notice how the input:email and input:submit are now of the same height.
+   But when we add align-item:center, the input:email returns back to its original height
+*/
+
+.newsletter form input {
+  border: none;
+  outline: none;
+}
+
+.newsletter form .email {
+  width: 280px;
+  /* border: 2px solid red; */
+}
+
+.newsletter form input::placeholder {
+  color: var(--text-color);
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+.newsletter .btn {
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* FOOTER STYLES */
+
+.footer {
+  max-width: 968px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.socials {
+  /* border: 2px solid red; */
+  display: flex;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
+/* REMEMBER: Display flex will remove all margin between flex items, kind of shrinks everything */
+/* NOTE: Use COLUMN-GAP when flex direction is ROW (default direction) */
+/* NOTE: Use ROW-GAP when flex direction is COLUMN */
+
+.socials .bx {
+  border: 4px solid rgb(2, 3, 7, 0.4);
+  background: var(--bg-color);
+  font-size: 2rem;
+  border-radius: 50%;
+  color: var(--main-color);
+}
+
+.socials .bx:hover {
+  color: var(--bg-color);
+  background: var(--main-color);
+  transition: 0.2s all linear;
+}
+
+/* COPYWRIGHT STYLES */
+section.copywright {
+  padding: 20px;
+  text-align: center;
+  color: var(--bg-color);
+}
+
+/* MEDIA QUERIES */
+
+/* For 1080px screen and below */
+@media (max-width: 1080px) {
+  .home-text {
+    padding: 0 100px;
+  }
+}
+/* PLEASE NOTE: When debugging for media queries or javascript, first thing to do is to
+
+   (1) DOCK THE DEVELOPER TOOLS TO A NEW WINDOW
+   (2) CLICK ON THE POINTER TOOL TO INSPECT ELEMENTS
+
+*/
+
+/* For 991px screen and below */
+@media (max-width: 991px) {
+  header {
+    padding: 18px 4%;
+  }
+
+  section {
+    padding: 50px 4%;
+  }
+
+  .home-text {
+    padding: 0 4%;
+  }
+
+  .home-text h1 {
+    font-size: 3rem;
+  }
+}
+
+/* NOTE: Using the pointer inspector tool, we went to the parent container of the .home-text container. Now at 991px, the .container div is 986px
+   Now 4% of this 986px is 39.44px. You can confirm this in the dev tools styles section.
+
+*/
+
+@media (max-width: 775px) {
+  header {
+    padding: 12px 4%;
+  }
+
+  #menu-icon {
+    display: initial;
+    color: var(--bg-color);
+  }
+
+  .navbar {
+    position: absolute;
+    top: -570px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-color);
+    row-gap: 1.4rem;
+    padding: 20px;
+    box-shadow: 4px 4px 0 4px rgb(14 55 54 / 15%);
+    transition: 0.2s all linear;
+    text-align: center;
+  }
+
+  /* Take navbar (ul elements) out of normal document flow, and we are left with logo, menu-icon, and sign-in btn to display flex space-between
+  */
+
+  /* TECHNIQUE:
+
+     (1) Use top: 100% to move an absolute element down the same height of its parent container
+     (2) Left: 0 to drag it to the left
+     (3) Right: 0 to drag it to right.....but its already anchored on the left....so we are doing position right to stretch to container to both left and right positions.....that is anchor it to the left and right of its parent. If you do only left or right, it will not stretch to both sides. The main reason for doing this is to display it as a flex and text-align center
+     (4) Display it flex, and set direction to column
+     (5) When we are done setting up the navbar container, we set its top tp -570px to hide it
+
+  */
+
+  .navbar a {
+    color: var(--text-color);
+    /* width: 100%; */
+  }
+
+  .navbar a::after {
+    display: none;
+  }
+
+  .navbar a:hover {
+    color: var(--main-color);
+    border-bottom: 2px solid var(--main-color);
+  }
+
+  header.shadow #menu-icon {
+    color: var(--text-color);
+  }
+
+  /* Creating new class to be injected onclick */
+  /* We bring the navbar out of hiding again with top: 100% */
+
+  .navbar.active {
+    top: 100%;
+  }
+
+  .home-text h1 {
+    font-size: 2.4rem;
+  }
+
+  .btn {
+    padding: 0.6rem 1.2rem;
+  }
+
+  .movies-container {
+    grid-template-columns: repeat(auto-fit, minmax(160px, auto));
+  }
+}
+
+@media (max-width: 472px) {
+  .newsletter form .email {
+    width: auto;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1rem;
+  }
+}
+
+@media (max-width: 370px) {
+  header {
+    padding: 6px 4%;
+  }
+
+  .home-text h1 {
+    font-size: 1.7rem;
+  }
+
+  .play {
+    right: 2rem;
+    bottom: 8%;
+  }
+
+  .play .bx {
+    padding: 7px;
+  }
+
+  .movies-container {
+    grid-template-columns: repeat(auto-fit, minmax(140px, auto));
+  }
+
+  .box .box-img {
+    height: 240px;
+  }
+}
